@@ -1,3 +1,13 @@
 name: SimpleSlider
 version: @version@
 main: click.seichi.simpleslider.SimpleSlider
+
+commands:
+  hoe:
+    usage: /hoe
+    description: This is a hoe command.
+
+perimissions:
+  simpleslider.hoe:
+    description: This Permission gives a wooden hoe sender.
+    default: true
