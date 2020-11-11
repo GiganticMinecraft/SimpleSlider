@@ -1,8 +1,9 @@
 buildscript {
     ext {
-        kotlin_version = '1.3.72'
-        spigot_version = '1.12.2-R0.1-SNAPSHOT'
-        worldguard_version = '6.2'
+        kotlin_version = "1.3.72"
+        kotlin_result_version = "1.1.8"
+        spigot_version = "1.12.2-R0.1-SNAPSHOT"
+        worldguard_version = "6.2"
     }
     repositories {
         mavenCentral()
@@ -12,14 +13,14 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
+apply plugin: "java"
+apply plugin: "kotlin"
 
-group = 'click.seichi'
-version = '1.0.0'
+group = "click.seichi"
+version = "1.0.0"
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 configurations {
     embed
@@ -29,28 +30,30 @@ configurations {
 repositories {
     mavenCentral()
     maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
     maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven { url "https://maven.enginehub.org/repo/" }
+    maven { url = "https://dl.bintray.com/michaelbull/maven" }
 }
 
 dependencies {
     implementation "com.sk89q.worldguard:worldguard-legacy:$worldguard_version"
     implementation "org.spigotmc:spigot-api:$spigot_version"
+    implementation "com.michael-bull.kotlin-result:kotlin-result:$kotlin_result_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     embed "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile fileTree(dir: "libs", include: "*.jar")
+    implementation fileTree(dir: "libs", include: "*.jar")
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
 processResources {
-    filteringCharset = 'UTF-8'
+    filteringCharset = "UTF-8"
     from(sourceSets.main.resources.srcDirs) {
         filter ReplaceTokens, tokens: [version: version]
     }
