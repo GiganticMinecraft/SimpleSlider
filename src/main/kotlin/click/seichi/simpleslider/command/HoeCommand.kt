@@ -1,7 +1,6 @@
 package click.seichi.simpleslider.command
 
-import click.seichi.simpleslider.Logger
-import org.bukkit.Bukkit
+import click.seichi.simpleslider.util.Logger
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.command.Command

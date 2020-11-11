@@ -1,4 +1,4 @@
-package click.seichi.simpleslider
+package click.seichi.simpleslider.util
 
 import org.bukkit.Bukkit
 
