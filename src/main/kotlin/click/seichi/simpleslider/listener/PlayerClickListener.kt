@@ -4,6 +4,7 @@ import click.seichi.simpleslider.ConfigHandler.maxDistanceOfSearching
 import click.seichi.simpleslider.data.Direction
 import click.seichi.simpleslider.data.Direction.*
 import click.seichi.simpleslider.data.Direction.Companion.getCardinalDirection
+import click.seichi.simpleslider.data.SliderType
 import click.seichi.simpleslider.data.SliderType.Companion.getSliderType
 import click.seichi.simpleslider.data.SliderType.Companion.isSlider
 import click.seichi.simpleslider.util.WorldGuard.getRegions
@@ -23,10 +24,10 @@ class PlayerClickListener : Listener {
         val block = player.location.block ?: return
         val sliderType = getSliderType(block) ?: return
         sliderType.addEffect(player)
-        val location = searchSlider(player.location, getCardinalDirection(player)) ?: return
+        val location = searchSlider(player.location, getCardinalDirection(player), sliderType) ?: return
     }
 
-    private fun searchSlider(defaultLocation: Location, direction: Direction): Location? {
+    private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Location? {
         /*
         ・そのブロックの保護情報を取得
         →取得できなければ強制終了
@@ -59,8 +60,8 @@ class PlayerClickListener : Listener {
                 }
                 // ERR: その座標にあるブロックを取得できない
                 val nextLocBlock = nextLocation.block ?: return null
-                // SUC: スライダーであるならLocationを返し、ERR: でないならループを戻る
-                if (isSlider(nextLocBlock)) return nextLocation
+                // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならループを戻る
+                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
             }
         }
         else if (defaultRegions.size == 1) {
@@ -81,8 +82,8 @@ class PlayerClickListener : Listener {
                 if (defaultRegion.id != regionOfNextLoc.id) return null
                 // ERR: その座標にあるブロックを取得できない
                 val nextLocBlock = nextLocation.block ?: return null
-                // SUC: スライダーであるならLocationを返し、ERR: でないならループを戻る
-                if (isSlider(nextLocBlock)) return nextLocation
+                // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならループを戻る
+                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
             }
         }
 
