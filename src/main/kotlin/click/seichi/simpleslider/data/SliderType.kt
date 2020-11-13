@@ -22,17 +22,17 @@ enum class SliderType(val plate: Material, val foundation: Material) {
     },
     DIAMOND(Material.IRON_PLATE, Material.DIAMOND_BLOCK) {
         override fun addEffect(player: Player) {
-            player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 5, 0), true)
+            player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, 0), true)
             object : BukkitRunnable() {
                 override fun run() {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 5, -1), true)
+                    player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, -2), true)
                 }
-            }.runTaskLater(SimpleSlider.INSTANCE, 20 * 5L)
+            }.runTaskLater(SimpleSlider.INSTANCE, 20 * 3)
         }
     },
     NETHER_QUARTZ(Material.IRON_PLATE, Material.QUARTZ_BLOCK) {
         override fun addEffect(player: Player) {
-            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20 * 60, 0), false)
+            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20 * 60, 2), false)
         }
     };
 
