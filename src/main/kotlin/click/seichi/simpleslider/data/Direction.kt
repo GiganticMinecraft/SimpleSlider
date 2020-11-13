@@ -17,17 +17,17 @@ enum class Direction {
          */
         fun getCardinalDirection(player: Player): Direction {
             val rotation = run {
-                val rotation = ((player.location.yaw - 180) % 360).toDouble()
+                val rotation = ((player.location.yaw - 180) % 360)
                 if (rotation >= 0) rotation else rotation + 360
-            }
+            }.toInt()
 
-            return when {
-                0 <= rotation && rotation < 45.0 -> NORTH
-                45.0 <= rotation && rotation < 135.0 -> EAST
-                135.0 <= rotation && rotation < 225.0 -> SOUTH
-                225.0 <= rotation && rotation < 315.0 -> WEST
-                315.0 <= rotation && rotation < 360.0 -> NORTH
-                else -> throw IllegalStateException("Failed to handle the player(${player.name})'s yaw.")
+            return when(rotation) {
+                in 0 until 45 -> NORTH
+                in 45 until 135 -> EAST
+                in 135 until 225 -> SOUTH
+                in 225 until 315 -> WEST
+                in 315 until 360 -> NORTH
+                else -> throw IllegalStateException("Failed to calculate the player(${player.name})'s yaw.")
             }
         }
     }
