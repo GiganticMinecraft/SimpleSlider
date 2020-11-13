@@ -13,6 +13,7 @@ class SimpleSlider : JavaPlugin() {
 
     override fun onEnable() {
         INSTANCE = this
+        ConfigHandler.loadConfig()
 
         Bukkit.getPluginManager().registerEvents(PlayerClickListener(), this)
         getCommand("hoe").executor = HoeCommand()
