@@ -2,6 +2,9 @@ package click.seichi.simpleslider.data
 
 import org.bukkit.entity.Player
 
+/**
+ * 方角をまとめたEnum
+ */
 enum class Direction {
     NORTH,
     EAST,

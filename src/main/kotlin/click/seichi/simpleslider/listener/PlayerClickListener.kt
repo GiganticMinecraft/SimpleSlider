@@ -4,6 +4,7 @@ import click.seichi.simpleslider.ConfigHandler.maxDistanceOfSearching
 import click.seichi.simpleslider.data.Direction
 import click.seichi.simpleslider.data.Direction.*
 import click.seichi.simpleslider.data.Direction.Companion.getCardinalDirection
+import click.seichi.simpleslider.data.OriginalHoe.isOriginalHoe
 import click.seichi.simpleslider.data.SliderType
 import click.seichi.simpleslider.data.SliderType.Companion.getSliderType
 import click.seichi.simpleslider.data.SliderType.Companion.isSlider
@@ -19,40 +20,26 @@ import org.bukkit.inventory.EquipmentSlot
 class PlayerClickListener : Listener {
     @EventHandler
     fun onPlayerClickWithWoodenHoe(event: PlayerInteractEvent) {
-        if (event.hand != EquipmentSlot.HAND || event.action != Action.RIGHT_CLICK_BLOCK) return
+        if (event.hand != EquipmentSlot.HAND ||
+                event.action != Action.RIGHT_CLICK_BLOCK || event.action != Action.RIGHT_CLICK_AIR) return
+        if (!event.hasItem() || !isOriginalHoe(event.item)) return
 
         val player = event.player ?: return
         val block = player.location.block ?: return
         val sliderType = getSliderType(block) ?: return
-        sliderType.addEffect(player)
         val location = searchSlider(player.location, getCardinalDirection(player), sliderType) ?: return
         player.apply {
             teleport(location)
             playSound(location, Sound.BLOCK_ANVIL_FALL, 1F, 1F)
         }
+        sliderType.giveEffectToPlayer(player)
     }
 
     private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Location? {
-        /*
-        ・そのブロックの保護情報を取得
-        →取得できなければ強制終了
-        →できたら次へ
-        ・そのブロックが最初のスライダーと同じ保護にあるか？
-        →同じ保護でなければ強制終了
-        →であれば次へ
-        ・そのブロックはスライダーか？
-        →YES = 関数の処理を終了、その座標を返す
-        →NO = 座標を移動し戻る
-         */
-
-        /*
-        globalなら1万ブロックだけ検索する、保護の確認をしない
-        保護があるならその保護の中、保護の確認をする
-         */
-
         val defaultRegions = getRegions(defaultLocation).also { if (it.size >= 2) return null }
         var nextLocation = defaultLocation.clone()
 
+        // globalなら ConfigHandler.maxDistanceOfSearching() だけ検索する、保護の確認をしない
         if (defaultRegions.isEmpty()) {
             for (i in 1..maxDistanceOfSearching()) {
                 nextLocation = nextLocation.apply {
@@ -69,6 +56,7 @@ class PlayerClickListener : Listener {
                 if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
             }
         }
+        // 保護が1つだけあるならその保護の中、保護の確認をする
         else if (defaultRegions.size == 1) {
             val defaultRegion = defaultRegions.iterator().next()
 
@@ -92,6 +80,7 @@ class PlayerClickListener : Listener {
             }
         }
 
+        // 保護が重なっているならnull
         return null
     }
 }

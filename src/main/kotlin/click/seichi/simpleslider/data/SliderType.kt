@@ -8,20 +8,27 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 
+/**
+ * Sliderの種類をまとめたEnum
+ * @param plate 感圧板の種類（基準となるブロック）
+ * @param foundation [plate]の1つY座標を下にした座標のブロック
+ */
 enum class SliderType(val plate: Material, val foundation: Material) {
     IRON(Material.IRON_PLATE, Material.IRON_BLOCK) {
-        override fun addEffect(player: Player) {/* Nothing to do */}
+        override fun giveEffectToPlayer(player: Player) {/* Nothing to do */ }
     },
     GOLD(Material.GOLD_PLATE, Material.GOLD_BLOCK) {
-        override fun addEffect(player: Player) {/* Nothing to do */}
+        override fun giveEffectToPlayer(player: Player) {/* Nothing to do */ }
     },
     EMERALD(Material.IRON_PLATE, Material.EMERALD_BLOCK) {
-        override fun addEffect(player: Player) {
+        override fun giveEffectToPlayer(player: Player) {
             player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 60, 0), false)
         }
     },
     DIAMOND(Material.IRON_PLATE, Material.DIAMOND_BLOCK) {
-        override fun addEffect(player: Player) {
+        override fun giveEffectToPlayer(player: Player) {
+            // 数秒上に浮いて数秒でゆっくり降りてくる
+            // LEVITATIONは負の値のレベルを指定すると降下するようになる
             player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, 0), true)
             object : BukkitRunnable() {
                 override fun run() {
@@ -31,24 +38,31 @@ enum class SliderType(val plate: Material, val foundation: Material) {
         }
     },
     NETHER_QUARTZ(Material.IRON_PLATE, Material.QUARTZ_BLOCK) {
-        override fun addEffect(player: Player) {
+        override fun giveEffectToPlayer(player: Player) {
             player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20 * 60, 2), false)
         }
     };
 
-    abstract fun addEffect(player: Player)
+    abstract fun giveEffectToPlayer(player: Player)
 
     // ref. https://qiita.com/urado/items/c88f54d4d9dc21eaf2b8
 
     companion object {
-        fun isSlider(plate: Material, foundation: Material)
-                = values().any { it.plate == plate && it.foundation == foundation }
-
+        /**
+         * 指定されたBlockとY座標1マイナスしたBlockで、それぞれSliderTypeを満たしているか
+         * @param block 感圧板が設置されていると想定される座標
+         * @return Boolean 基本的にはSliderTypeを満たすブロック群ならtrue、そうでないならfalse。ただし、指定されたBlockからY座標を1マイナスしたBlockがnullならfalse
+         */
         fun isSlider(block: Block): Boolean {
             val foundation = block.location.apply { y -= 1 }.block ?: return false
-            return isSlider(block.type, foundation.type)
+            return values().any { it.plate == block.type && it.foundation == foundation.type }
         }
 
+        /**
+         * 指定されたブロックとY座標1マイナスしたBlockで構成されたSliderのTypeを取得する
+         * @param block 感圧板が設置されていると想定される座標
+         * @return 当てはまるSliderTypeがあれば[SliderType]、ないか、1Y座標下のブロックが取得できなければnull
+         */
         fun getSliderType(block: Block): SliderType? {
             val foundation = block.location.apply { y -= 1 }.block ?: return null
             return values().find { it.plate == block.type && it.foundation == foundation.type }

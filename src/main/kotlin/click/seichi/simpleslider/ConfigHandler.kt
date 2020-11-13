@@ -3,6 +3,9 @@ package click.seichi.simpleslider
 import click.seichi.simpleslider.SimpleSlider.Companion.INSTANCE
 import org.bukkit.configuration.file.FileConfiguration
 
+/**
+ * config.ymlを操作する上で必要な関数などをまとめたobject
+ */
 object ConfigHandler {
     private lateinit var config: FileConfiguration
 

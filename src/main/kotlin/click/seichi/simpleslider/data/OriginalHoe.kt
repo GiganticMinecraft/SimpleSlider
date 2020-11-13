@@ -8,6 +8,9 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
+/**
+ * Sliderを利用する上で、必要となるアイテムのデータを纏めたObject
+ */
 object OriginalHoe {
     fun getOriginalHoe(): ItemStack {
         val itemMeta = Bukkit.getItemFactory().getItemMeta(Material.WOOD_HOE).apply {
@@ -24,7 +27,7 @@ object OriginalHoe {
     fun isOriginalHoe(itemStack: ItemStack) =
         itemStack.type != Material.AIR && NBTItem(itemStack).getByte(NBTTagConstants.typeIdTag) == 1.toByte()
 
-    object NBTTagConstants {
+    private object NBTTagConstants {
         val typeIdTag = "originalHoeItemTypeId"
     }
 }
