@@ -3,7 +3,7 @@ buildscript {
         kotlin_version = "1.3.72"
         spigot_version = "1.12.2-R0.1-SNAPSHOT"
         worldguard_version = "6.2"
-        item_nbt_api_version = "2.6.0"
+        item_nbt_api_version = "1.8.2-SNAPSHOT"
     }
     repositories {
         mavenCentral()
@@ -50,7 +50,7 @@ dependencies {
     implementation "com.sk89q.worldguard:worldguard-legacy:$worldguard_version"
     implementation "org.spigotmc:spigot-api:$spigot_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "de.tr7zw:item-nbt-api:$item_nbt_api_version"
+//    implementation "de.tr7zw:item-nbt-api-plugin:$item_nbt_api_version"
     embed "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation fileTree(dir: "libs", include: "*.jar")
 }
