@@ -17,7 +17,7 @@ enum class Direction {
          */
         fun getCardinalDirection(player: Player): Direction {
             val rotation = run {
-                val rotation = (player.location.yaw - 90) % 360.toDouble()
+                val rotation = ((player.location.yaw - 180) % 360).toDouble()
                 if (rotation >= 0) rotation else rotation + 360
             }
 
