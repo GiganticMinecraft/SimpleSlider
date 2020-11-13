@@ -50,7 +50,7 @@ enum class SliderType(val plate: Material, val foundation: Material) {
         }
 
         fun getSliderType(block: Block): SliderType? {
-            val foundation = block.location.apply { y.minus(1) }.block ?: return null
+            val foundation = block.location.apply { y -= 1 }.block ?: return null
             return values().find { it.plate == block.type && it.foundation == foundation.type }
         }
     }
