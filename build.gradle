@@ -4,6 +4,7 @@ buildscript {
         spigot_version = "1.12.2-R0.1-SNAPSHOT"
         worldguard_version = "6.2"
         item_nbt_api_version = "1.8.2-SNAPSHOT"
+        bstats_version = "1.4"
     }
     repositories {
         mavenCentral()
@@ -50,7 +51,9 @@ dependencies {
     implementation "com.sk89q.worldguard:worldguard-legacy:$worldguard_version"
     implementation "org.spigotmc:spigot-api:$spigot_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-//    implementation "de.tr7zw:item-nbt-api-plugin:$item_nbt_api_version"
+    // bstatsはItemNBTAPIに要求されたので追加。本来要求されてるのは1.2っぽい
+    implementation "org.bstats:bstats-bukkit-lite:$bstats_version"
+    implementation "de.tr7zw:item-nbt-api-plugin:$item_nbt_api_version"
     embed "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation fileTree(dir: "libs", include: "*.jar")
 }
