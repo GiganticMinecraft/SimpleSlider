@@ -1,6 +1,8 @@
 package click.seichi.simpleslider
 
 import click.seichi.simpleslider.command.HoeCommand
+import click.seichi.simpleslider.listener.PlayerClickListener
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class SimpleSlider : JavaPlugin() {
@@ -12,6 +14,7 @@ class SimpleSlider : JavaPlugin() {
     override fun onEnable() {
         INSTANCE = this
 
+        Bukkit.getPluginManager().registerEvents(PlayerClickListener(), this)
         getCommand("hoe").executor = HoeCommand()
     }
 
