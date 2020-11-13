@@ -9,6 +9,8 @@ WIP
 
 ## Requirement
 
+* Spigot
+    * Developed and debugged in 1.12.2
 * [item-nbt-api-plugin-1.8.2-SNAPSHOT](https://www.spigotmc.org/resources/item-entity-tile-nbt-api.7939/download?version=241690)
 * [worldguard-bukkit-6.2.2](https://dev.bukkit.org/projects/worldguard/files/2610618/download)
 
