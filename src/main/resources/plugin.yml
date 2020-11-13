@@ -1,7 +1,7 @@
 name: SimpleSlider
 version: @version@
 main: click.seichi.simpleslider.SimpleSlider
-depend: [WorldGuard]
+depend: [WorldGuard, NBTAPI]
 
 commands:
   hoe:
