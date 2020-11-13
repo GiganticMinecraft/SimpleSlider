@@ -12,11 +12,14 @@ enum class Direction {
         /**
          * [player]の見ている方向を返す
          *
-         * @return [Direction]、判定できなければnull
+         * @return [Direction]、判定できなければ[IllegalStateException]
          * @see <a href="http://bukkit.org/threads/solved-player-direction.72789/">Bukkit Forum: Player Direction</a?
          */
         fun getCardinalDirection(player: Player): Direction {
-            val rotation = (player.location.yaw - 90) % 360.toDouble().also { if (it < 0) it.plus(360.0) }
+            val rotation = run {
+                val rotation = (player.location.yaw - 90) % 360.toDouble()
+                if (rotation >= 0) rotation else rotation + 360
+            }
 
             return when {
                 0 <= rotation && rotation < 45.0 -> NORTH
