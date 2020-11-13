@@ -3,11 +3,8 @@ package click.seichi.simpleslider.listener
 import click.seichi.simpleslider.data.Direction
 import click.seichi.simpleslider.data.Direction.*
 import click.seichi.simpleslider.data.Direction.Companion.getCardinalDirection
-import click.seichi.simpleslider.data.OriginalHoe.isOriginalHoe
-import click.seichi.simpleslider.data.SliderType
 import click.seichi.simpleslider.data.SliderType.Companion.getSliderType
 import click.seichi.simpleslider.data.SliderType.Companion.isSlider
-import click.seichi.simpleslider.util.Logger
 import click.seichi.simpleslider.util.WorldGuard.getRegions
 import org.bukkit.Location
 import org.bukkit.event.EventHandler
@@ -20,10 +17,6 @@ class PlayerClickListener : Listener {
     @EventHandler
     fun onPlayerClickWithWoodenHoe(event: PlayerInteractEvent) {
         if (event.hand != EquipmentSlot.HAND || event.action != Action.RIGHT_CLICK_BLOCK) return
-        if (!event.hasItem() || !isOriginalHoe(event.item)) {
-            Logger.info("is not original hoe")
-            return
-        }
 
         val player = event.player ?: return
         val block = player.location.block ?: return
