@@ -9,6 +9,7 @@ import click.seichi.simpleslider.data.SliderType.Companion.getSliderType
 import click.seichi.simpleslider.data.SliderType.Companion.isSlider
 import click.seichi.simpleslider.util.WorldGuard.getRegions
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -25,6 +26,10 @@ class PlayerClickListener : Listener {
         val sliderType = getSliderType(block) ?: return
         sliderType.addEffect(player)
         val location = searchSlider(player.location, getCardinalDirection(player), sliderType) ?: return
+        player.apply {
+            teleport(location)
+            playSound(location, Sound.BLOCK_ANVIL_FALL, 1F, 1F)
+        }
     }
 
     private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Location? {
