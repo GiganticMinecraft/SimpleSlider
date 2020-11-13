@@ -8,9 +8,6 @@ object WorldGuard {
     private val INSTANCE =
             WorldGuardPlugin.inst() ?: throw IllegalStateException("WorldGuardPluginが見つかりませんでした。")
 
-    // FIXME global保護だとnullになると思う
-    fun getOneRegion(location: Location): ProtectedRegion? {
-        val regions = INSTANCE.getRegionManager(location.world).getApplicableRegions(location).regions
-        return if (regions.size != 1) null else regions.iterator().next()
-    }
+    fun getRegions(location: Location): Set<ProtectedRegion> =
+            INSTANCE.getRegionManager(location.world).getApplicableRegions(location).regions
 }
