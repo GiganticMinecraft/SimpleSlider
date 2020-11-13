@@ -1,5 +1,6 @@
 package click.seichi.simpleslider.listener
 
+import click.seichi.simpleslider.ConfigHandler.maxDistanceOfSearching
 import click.seichi.simpleslider.data.Direction
 import click.seichi.simpleslider.data.Direction.*
 import click.seichi.simpleslider.data.Direction.Companion.getCardinalDirection
@@ -47,8 +48,7 @@ class PlayerClickListener : Listener {
         var nextLocation = defaultLocation.clone()
 
         if (defaultRegions.isEmpty()) {
-            // TODO 最大値を変更できるように
-            for (i in 1..10000) {
+            for (i in 1..maxDistanceOfSearching()) {
                 nextLocation = nextLocation.apply {
                     when (direction) {
                         NORTH -> z -= 1
