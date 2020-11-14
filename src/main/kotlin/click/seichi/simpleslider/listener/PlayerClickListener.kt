@@ -76,6 +76,7 @@ class PlayerClickListener : Listener {
                 // ERR: その座標にあるブロックを取得できない
                 val nextLocBlock = nextLocation.block ?: return null
                 // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならカウンタをインクリメントして再びループ
+                // `getSliderType(nextLocBlock)`は、`isSlider(nextLocBlock)`の後に指定してあるのでnullにはならない
                 if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
                 i++
             }
