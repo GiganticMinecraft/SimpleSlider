@@ -37,17 +37,16 @@ class PlayerClickListener : Listener {
 
     private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Location? {
         val defaultRegions = getRegions(defaultLocation).also { if (it.size >= 2) return null }
-        var nextLocation = defaultLocation.clone()
 
         // globalなら ConfigHandler.maxDistanceOfSearching() だけ検索する、保護の確認をしない
         if (defaultRegions.isEmpty()) {
             for (i in 1..maxDistanceOfSearching()) {
-                nextLocation = nextLocation.apply {
+                val nextLocation = defaultLocation.apply {
                     when (direction) {
-                        NORTH -> z -= 1
-                        EAST -> x += 1
-                        WEST -> x -= 1
-                        SOUTH -> z += 1
+                        NORTH -> z -= i
+                        EAST -> x += i
+                        WEST -> x -= i
+                        SOUTH -> z += i
                     }
                 }
                 // ERR: その座標にあるブロックを取得できない
@@ -60,13 +59,14 @@ class PlayerClickListener : Listener {
         else if (defaultRegions.size == 1) {
             val defaultRegion = defaultRegions.iterator().next()
 
+            var i = 0
             while (true) {
-                nextLocation = nextLocation.apply {
+                val nextLocation = defaultLocation.apply {
                     when (direction) {
-                        NORTH -> z -= 1
-                        EAST -> x += 1
-                        WEST -> x -= 1
-                        SOUTH -> z += 1
+                        NORTH -> z -= i
+                        EAST -> x += i
+                        WEST -> x -= i
+                        SOUTH -> z += i
                     }
                 }
                 // ERR: 保護が見つからない
@@ -75,8 +75,9 @@ class PlayerClickListener : Listener {
                 if (defaultRegion.id != regionOfNextLoc.id) return null
                 // ERR: その座標にあるブロックを取得できない
                 val nextLocBlock = nextLocation.block ?: return null
-                // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならループを戻る
+                // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならカウンタをインクリメントして再びループ
                 if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
+                i++
             }
         }
 
