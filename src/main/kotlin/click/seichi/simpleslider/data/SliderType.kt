@@ -27,7 +27,6 @@ enum class SliderType(val plate: Material, val foundation: Material) {
     },
     DIAMOND(Material.IRON_PLATE, Material.DIAMOND_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
-            // 数秒上に浮いて数秒でゆっくり降りてくる
             // LEVITATIONは負の値のレベルを指定すると降下するようになる
             player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, 0), true)
             object : BukkitRunnable() {
