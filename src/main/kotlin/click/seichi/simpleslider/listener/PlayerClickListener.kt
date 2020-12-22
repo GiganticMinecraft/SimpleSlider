@@ -58,12 +58,15 @@ class PlayerClickListener : Listener {
         }
     }
 
-    private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Result<Location> {
+    private fun searchSlider(defaultLocation: Location,
+                             direction: Direction,
+                             sliderType: SliderType)
+    : Result<Location> {
         val defaultRegions = getRegions(defaultLocation)
 
         // globalなら ConfigHandler.maxDistanceOfSearching() だけ検索する、保護の確認をしない
-        if (defaultRegions.isEmpty()) {
-            for (i in 1..maxDistanceOfSearching()) {
+        when(defaultRegions.size) {
+            0 -> for (i in 1..maxDistanceOfSearching()) {
                 val nextLocation = defaultLocation.clone().apply {
                     when (direction) {
                         NORTH -> z -= i
@@ -75,33 +78,37 @@ class PlayerClickListener : Listener {
                 // ERR: その座標にあるブロックを取得できない
                 val nextLocBlock = nextLocation.block ?: return Err(BlockNotFoundException)
                 // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならループを戻る
-                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return Ok(nextLocation)
+                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!)
+                    return Ok(nextLocation)
             }
-        }
-        // 保護が1つだけあるならその保護の中、保護の確認をする
-        else if (defaultRegions.size == 1) {
-            val defaultRegion = defaultRegions.iterator().next()
+            1 -> {
+                val defaultRegion = defaultRegions.iterator().next()
 
-            var i = 1
-            while (true) {
-                val nextLocation = defaultLocation.clone().apply {
-                    when (direction) {
-                        NORTH -> z -= i
-                        EAST -> x += i
-                        WEST -> x -= i
-                        SOUTH -> z += i
+                var i = 1
+                while (true) {
+                    val nextLocation = defaultLocation.clone().apply {
+                        when (direction) {
+                            NORTH -> z -= i
+                            EAST -> x += i
+                            WEST -> x -= i
+                            SOUTH -> z += i
+                        }
                     }
+                    // ERR: 保護が見つからない or 同じ保護で保護されていない
+                    if (getRegions(nextLocation).none { it.id == defaultRegion.id })
+                        return Err(SliderNotFoundInSameRegion)
+                    // ERR: その座標にあるブロックを取得できない
+                    val nextLocBlock = nextLocation.block ?: return Err(BlockNotFoundException)
+                    // SUC: スライダーであるかつSliderTypeが同じなら、Locationを返す
+                    // ERR: そうでないなら、カウンタをインクリメントして再びループ
+                    // `getSliderType(nextLocBlock)`は、`isSlider(nextLocBlock)`の後に指定してあるのでnullにはならない
+                    if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!)
+                        return Ok(nextLocation)
+                    i++
                 }
-                // ERR: 保護が見つからない or 同じ保護で保護されていない
-                if (getRegions(nextLocation).none { it.id == defaultRegion.id }) return Err(SliderNotFoundInSameRegion)
-                // ERR: その座標にあるブロックを取得できない
-                val nextLocBlock = nextLocation.block ?: return Err(BlockNotFoundException)
-                // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならカウンタをインクリメントして再びループ
-                // `getSliderType(nextLocBlock)`は、`isSlider(nextLocBlock)`の後に指定してあるのでnullにはならない
-                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return Ok(nextLocation)
-                i++
             }
-        } else return Err(RegionsDuplicatedException)
+            else -> return Err(RegionsDuplicatedException)
+        }
 
         // 保護がない or 1つだけあって、Sliderが見つからない時はここにくる
         return Err(SliderNotFound)
