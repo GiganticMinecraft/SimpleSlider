@@ -21,8 +21,10 @@ class PlayerClickListener : Listener {
     @EventHandler
     fun onPlayerClickWithWoodenHoe(event: PlayerInteractEvent) {
         if (event.hand != EquipmentSlot.HAND ||
-                event.action != Action.RIGHT_CLICK_BLOCK || event.action != Action.RIGHT_CLICK_AIR) return
-        if (!event.hasItem() || !isOriginalHoe(event.item)) return
+                (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR)) return
+        if (!event.hasItem() || !isOriginalHoe(event.item)) {
+            return
+        }
 
         val player = event.player ?: return
         val block = player.location.block ?: return
