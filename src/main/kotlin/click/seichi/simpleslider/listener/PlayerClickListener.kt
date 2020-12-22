@@ -4,11 +4,16 @@ import click.seichi.simpleslider.ConfigHandler.maxDistanceOfSearching
 import click.seichi.simpleslider.data.Direction
 import click.seichi.simpleslider.data.Direction.*
 import click.seichi.simpleslider.data.Direction.Companion.getCardinalDirection
+import click.seichi.simpleslider.data.Error.*
 import click.seichi.simpleslider.data.OriginalHoe.isOriginalHoe
+import click.seichi.simpleslider.data.Result
+import click.seichi.simpleslider.data.Result.Err
+import click.seichi.simpleslider.data.Result.Ok
 import click.seichi.simpleslider.data.SliderType
 import click.seichi.simpleslider.data.SliderType.Companion.getSliderType
 import click.seichi.simpleslider.data.SliderType.Companion.isSlider
 import click.seichi.simpleslider.util.WorldGuard.getRegions
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Sound
 import org.bukkit.event.EventHandler
@@ -27,23 +32,39 @@ class PlayerClickListener : Listener {
         }
 
         val player = event.player ?: return
-        val block = player.location.block ?: return
-        val sliderType = getSliderType(block) ?: return
-        val location = searchSlider(player.location, getCardinalDirection(player), sliderType) ?: return
-        player.apply {
-            teleport(location)
-            playSound(location, Sound.BLOCK_ANVIL_FALL, 1F, 1F)
+        val block = player.location.block ?: run {
+            player.sendMessage("Failed to get block at your location.")
+            return
         }
-        sliderType.giveEffectToPlayer(player)
+        val sliderType = getSliderType(block) ?: run {
+            player.sendMessage("Where you are standing was not 'Slider'.")
+            return
+        }
+
+        when (val result = searchSlider(player.location, getCardinalDirection(player), sliderType)) {
+            is Ok -> {
+                player.apply {
+                    teleport(result.data)
+                    playSound(location, Sound.BLOCK_ANVIL_FALL, 1F, 1F)
+                }
+                sliderType.giveEffectToPlayer(player)
+            }
+            is Err -> {
+                player.apply {
+                    sendMessage("${ChatColor.RED}${result.exception.reason}")
+                    playSound(player.location, Sound.BLOCK_DISPENSER_FAIL, 1F, 1F)
+                }
+            }
+        }
     }
 
-    private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Location? {
-        val defaultRegions = getRegions(defaultLocation).also { if (it.size >= 2) return null }
+    private fun searchSlider(defaultLocation: Location, direction: Direction, sliderType: SliderType): Result<Location> {
+        val defaultRegions = getRegions(defaultLocation)
 
         // globalなら ConfigHandler.maxDistanceOfSearching() だけ検索する、保護の確認をしない
         if (defaultRegions.isEmpty()) {
             for (i in 1..maxDistanceOfSearching()) {
-                val nextLocation = defaultLocation.apply {
+                val nextLocation = defaultLocation.clone().apply {
                     when (direction) {
                         NORTH -> z -= i
                         EAST -> x += i
@@ -52,18 +73,18 @@ class PlayerClickListener : Listener {
                     }
                 }
                 // ERR: その座標にあるブロックを取得できない
-                val nextLocBlock = nextLocation.block ?: return null
+                val nextLocBlock = nextLocation.block ?: return Err(BlockNotFoundException)
                 // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならループを戻る
-                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
+                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return Ok(nextLocation)
             }
         }
         // 保護が1つだけあるならその保護の中、保護の確認をする
         else if (defaultRegions.size == 1) {
             val defaultRegion = defaultRegions.iterator().next()
 
-            var i = 0
+            var i = 1
             while (true) {
-                val nextLocation = defaultLocation.apply {
+                val nextLocation = defaultLocation.clone().apply {
                     when (direction) {
                         NORTH -> z -= i
                         EAST -> x += i
@@ -71,20 +92,18 @@ class PlayerClickListener : Listener {
                         SOUTH -> z += i
                     }
                 }
-                // ERR: 保護が見つからない
-                val regionOfNextLoc = getRegions(nextLocation).also { if (it.size != 1) return null }.iterator().next()
-                // ERR: 保護が同じではない
-                if (defaultRegion.id != regionOfNextLoc.id) return null
+                // ERR: 保護が見つからない or 同じ保護で保護されていない
+                if (getRegions(nextLocation).none { it.id == defaultRegion.id }) return Err(SliderNotFoundInSameRegion)
                 // ERR: その座標にあるブロックを取得できない
-                val nextLocBlock = nextLocation.block ?: return null
+                val nextLocBlock = nextLocation.block ?: return Err(BlockNotFoundException)
                 // SUC: スライダーであるかつSliderTypeが同じならLocationを返し、ERR: でないならカウンタをインクリメントして再びループ
                 // `getSliderType(nextLocBlock)`は、`isSlider(nextLocBlock)`の後に指定してあるのでnullにはならない
-                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return nextLocation
+                if (isSlider(nextLocBlock) && sliderType == getSliderType(nextLocBlock)!!) return Ok(nextLocation)
                 i++
             }
-        }
+        } else return Err(RegionsDuplicatedException)
 
-        // 保護が重なっているならnull
-        return null
+        // 保護がない or 1つだけあって、Sliderが見つからない時はここにくる
+        return Err(SliderNotFound)
     }
 }
