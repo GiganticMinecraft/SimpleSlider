@@ -60,8 +60,8 @@ class PlayerClickListener : Listener {
 
     private fun searchSlider(defaultLocation: Location,
                              direction: Direction,
-                             sliderType: SliderType)
-    : Result<Location> {
+                             sliderType: SliderType
+    ): Result<Location> {
         val defaultRegions = getRegions(defaultLocation)
 
         // globalなら ConfigHandler.maxDistanceOfSearching() だけ検索する、保護の確認をしない
