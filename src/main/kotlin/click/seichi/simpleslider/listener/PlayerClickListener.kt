@@ -4,11 +4,10 @@ import click.seichi.simpleslider.ConfigHandler.maxDistanceOfSearching
 import click.seichi.simpleslider.data.Direction
 import click.seichi.simpleslider.data.Direction.*
 import click.seichi.simpleslider.data.Direction.Companion.getCardinalDirection
-import click.seichi.simpleslider.data.Error.*
+import click.seichi.simpleslider.util.Error.*
 import click.seichi.simpleslider.data.OriginalHoe.isOriginalHoe
-import click.seichi.simpleslider.data.Result
-import click.seichi.simpleslider.data.Result.Err
-import click.seichi.simpleslider.data.Result.Ok
+import click.seichi.simpleslider.util.Result
+import click.seichi.simpleslider.util.Result.*
 import click.seichi.simpleslider.data.SliderType
 import click.seichi.simpleslider.data.SliderType.Companion.getSliderType
 import click.seichi.simpleslider.data.SliderType.Companion.isSlider

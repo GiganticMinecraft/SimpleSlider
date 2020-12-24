@@ -1,4 +1,4 @@
-package click.seichi.simpleslider.data
+package click.seichi.simpleslider.util
 
 enum class Error(val reason: String) {
     RegionsDuplicatedException("Where you are standing was protected by two or more regions."),
