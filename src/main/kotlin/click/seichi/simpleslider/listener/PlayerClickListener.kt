@@ -48,6 +48,7 @@ class PlayerClickListener : Listener {
                     playSound(location, Sound.BLOCK_ANVIL_FALL, 1F, 1F)
                 }
                 sliderType.giveEffectToPlayer(player)
+                event.isCancelled = true
             }
             is Err -> {
                 player.apply {
