@@ -6,9 +6,8 @@ depend: [WorldGuard, ItemNBTAPI]
 commands:
   hoe:
     usage: /hoe
-    description: This is a hoe command.
+    description: This command gives a wooden hoe, whose NBT tags are customized, to the sender.
 
 perimissions:
   simpleslider.hoe:
-    description: This Permission gives a wooden hoe sender.
     default: true
