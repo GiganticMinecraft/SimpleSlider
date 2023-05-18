@@ -15,7 +15,7 @@ class HoeCommand : CommandExecutor {
         }
 
         val itemStack = getOriginalHoe()
-        val inventory = sender.inventory ?: return true
+        val inventory = sender.inventory
 
         if (inventory.firstEmpty() == -1) sender.world.dropItemNaturally(sender.location, itemStack)
         else inventory.addItem(itemStack)

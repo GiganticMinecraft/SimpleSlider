@@ -14,31 +14,31 @@ import org.bukkit.scheduler.BukkitRunnable
  * @param foundation [plate]の1つY座標を下にした座標のブロック
  */
 enum class SliderType(val plate: Material, val foundation: Material) {
-    IRON(Material.IRON_PLATE, Material.IRON_BLOCK) {
+    IRON(Material.IRON_CHESTPLATE, Material.IRON_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {/* Nothing to do */ }
     },
-    GOLD(Material.GOLD_PLATE, Material.GOLD_BLOCK) {
+    GOLD(Material.GOLDEN_CHESTPLATE, Material.GOLD_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {/* Nothing to do */ }
     },
-    EMERALD(Material.IRON_PLATE, Material.EMERALD_BLOCK) {
+    EMERALD(Material.IRON_CHESTPLATE, Material.EMERALD_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
-            player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 60, 0), false)
+            player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 60, 0))
         }
     },
-    DIAMOND(Material.IRON_PLATE, Material.DIAMOND_BLOCK) {
+    DIAMOND(Material.IRON_CHESTPLATE, Material.DIAMOND_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
             // LEVITATIONは負の値のレベルを指定すると降下するようになる
-            player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, 0), true)
+            player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, 0))
             object : BukkitRunnable() {
                 override fun run() {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, -2), true)
+                    player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, -2))
                 }
             }.runTaskLater(SimpleSlider.INSTANCE, 20 * 3)
         }
     },
-    NETHER_QUARTZ(Material.IRON_PLATE, Material.QUARTZ_BLOCK) {
+    NETHER_QUARTZ(Material.IRON_CHESTPLATE, Material.QUARTZ_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
-            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20 * 60, 2), false)
+            player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20 * 60, 2))
         }
     };
 
@@ -53,7 +53,7 @@ enum class SliderType(val plate: Material, val foundation: Material) {
          * @return Boolean 基本的にはSliderTypeを満たすブロック群ならtrue、そうでないならfalse。ただし、指定されたBlockからY座標を1マイナスしたBlockがnullならfalse
          */
         fun isSlider(block: Block): Boolean {
-            val foundation = block.location.apply { y -= 1 }.block ?: return false
+            val foundation = block.location.apply { y -= 1 }.block
             return values().any { it.plate == block.type && it.foundation == foundation.type }
         }
 
@@ -63,7 +63,7 @@ enum class SliderType(val plate: Material, val foundation: Material) {
          * @return 当てはまるSliderTypeがあれば[SliderType]、ないか、1Y座標下のブロックが取得できなければnull
          */
         fun getSliderType(block: Block): SliderType? {
-            val foundation = block.location.apply { y -= 1 }.block ?: return null
+            val foundation = block.location.apply { y -= 1 }.block
             return values().find { it.plate == block.type && it.foundation == foundation.type }
         }
     }
