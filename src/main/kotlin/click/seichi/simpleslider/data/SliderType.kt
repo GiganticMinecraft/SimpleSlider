@@ -14,18 +14,18 @@ import org.bukkit.scheduler.BukkitRunnable
  * @param foundation [plate]の1つY座標を下にした座標のブロック
  */
 enum class SliderType(val plate: Material, val foundation: Material) {
-    IRON(Material.IRON_PLATE, Material.IRON_BLOCK) {
+    IRON(Material.IRON_CHESTPLATE, Material.IRON_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {/* Nothing to do */ }
     },
-    GOLD(Material.GOLD_PLATE, Material.GOLD_BLOCK) {
+    GOLD(Material.GOLDEN_CHESTPLATE, Material.GOLD_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {/* Nothing to do */ }
     },
-    EMERALD(Material.IRON_PLATE, Material.EMERALD_BLOCK) {
+    EMERALD(Material.IRON_CHESTPLATE, Material.EMERALD_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
             player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 60, 0), false)
         }
     },
-    DIAMOND(Material.IRON_PLATE, Material.DIAMOND_BLOCK) {
+    DIAMOND(Material.IRON_CHESTPLATE, Material.DIAMOND_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
             // LEVITATIONは負の値のレベルを指定すると降下するようになる
             player.addPotionEffect(PotionEffect(PotionEffectType.LEVITATION, 20 * 3, 0), true)
@@ -36,7 +36,7 @@ enum class SliderType(val plate: Material, val foundation: Material) {
             }.runTaskLater(SimpleSlider.INSTANCE, 20 * 3)
         }
     },
-    NETHER_QUARTZ(Material.IRON_PLATE, Material.QUARTZ_BLOCK) {
+    NETHER_QUARTZ(Material.IRON_CHESTPLATE, Material.QUARTZ_BLOCK) {
         override fun giveEffectToPlayer(player: Player) {
             player.addPotionEffect(PotionEffect(PotionEffectType.JUMP, 20 * 60, 2), false)
         }

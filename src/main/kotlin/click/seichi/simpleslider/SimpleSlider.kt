@@ -16,7 +16,7 @@ class SimpleSlider : JavaPlugin() {
         ConfigHandler.loadConfig()
 
         Bukkit.getPluginManager().registerEvents(PlayerClickListener(), this)
-        getCommand("hoe").executor = HoeCommand()
+        getCommand("hoe")?.setExecutor(HoeCommand())
     }
 
     override fun onDisable() {

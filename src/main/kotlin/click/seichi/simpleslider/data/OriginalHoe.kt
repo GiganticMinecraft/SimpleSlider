@@ -1,6 +1,6 @@
 package click.seichi.simpleslider.data
 
-import de.tr7zw.itemnbtapi.NBTItem
+import de.tr7zw.nbtapi.NBTItem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -13,13 +13,13 @@ import org.bukkit.inventory.ItemStack
  */
 object OriginalHoe {
     fun getOriginalHoe(): ItemStack {
-        val itemMeta = Bukkit.getItemFactory().getItemMeta(Material.WOOD_HOE).apply {
-            displayName = "${ChatColor.AQUA}Let's slide!"
+        val itemMeta = Bukkit.getItemFactory().getItemMeta(Material.WOODEN_HOE)?.apply {
+            setDisplayName("${ChatColor.AQUA}Let's slide!")
             addItemFlags(ItemFlag.HIDE_ENCHANTS)
             addEnchant(Enchantment.THORNS, 0, true)
         }
 
-        val hoe = ItemStack(Material.WOOD_HOE, 1).apply { setItemMeta(itemMeta) }
+        val hoe = ItemStack(Material.WOODEN_HOE, 1).apply { setItemMeta(itemMeta) }
 
         return NBTItem(hoe).apply { setByte(NBTTagConstants.typeIdTag, 1.toByte()) }.item
     }

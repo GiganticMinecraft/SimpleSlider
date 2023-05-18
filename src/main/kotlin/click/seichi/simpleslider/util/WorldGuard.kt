@@ -1,5 +1,9 @@
 package click.seichi.simpleslider.util
 
+import com.sk89q.worldedit.bukkit.BukkitWorld
+import com.sk89q.worldedit.math.BlockVector3
+import com.sk89q.worldedit.world.World
+import com.sk89q.worldguard.bukkit.BukkitRegionContainer
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import com.sk89q.worldguard.protection.regions.ProtectedRegion
 import org.bukkit.Location
@@ -15,5 +19,6 @@ object WorldGuard {
      * 指定されたlocationを保護している保護領域のSetを返す
      */
     fun getRegions(location: Location): Set<ProtectedRegion> =
-            INSTANCE.getRegionManager(location.world).getApplicableRegions(location).regions
+        BukkitRegionContainer(INSTANCE).get(BukkitWorld(location.world))
+            ?.getApplicableRegions(BlockVector3.at(location.x, location.y, location.z))?.regions.orEmpty()
 }
