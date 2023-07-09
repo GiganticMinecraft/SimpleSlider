@@ -14,14 +14,12 @@ buildscript {
     }
 }
 
-apply plugin: "java"
-apply plugin: "kotlin"
+apply {
+    id 'kotlin'
+}
 
 group = "click.seichi"
 version = "1.1.0"
-
-sourceCompatibility = "1.17"
-targetCompatibility = "1.17"
 
 configurations {
     embed
@@ -54,6 +52,7 @@ dependencies {
     implementation "org.bstats:bstats-bukkit-lite:$bstats_version"
     implementation "de.tr7zw:item-nbt-api-plugin:$item_nbt_api_version"
     embed "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
     implementation fileTree(dir: "libs", include: "*.jar")
 }
 
@@ -72,3 +71,10 @@ jar {
     from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
+compileKotlin {
+    kotlinOptions.jvmTarget = "${jvm_version}"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "${jvm_version}"
+}
