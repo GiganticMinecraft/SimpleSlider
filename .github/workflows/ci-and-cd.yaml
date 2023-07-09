@@ -12,5 +12,5 @@ jobs:
     name: CD
     needs:
       - ci
-    uses: GiganticMinecraft/shared-workflows/.github/workflows/kotlin-ci.yaml@main
+    uses: GiganticMinecraft/shared-workflows/.github/workflows/kotlin-cd.yaml@main
     if: github.ref == 'refs/heads/main'
