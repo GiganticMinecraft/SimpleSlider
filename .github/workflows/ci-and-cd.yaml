@@ -7,10 +7,10 @@ on:
 jobs:
   ci:
     name: CI
-    uses: Lucky3028/shared-workflows/.github/workflows/kotlin-ci.yaml@main
+    uses: GiganticMinecraft/shared-workflows/.github/workflows/kotlin-ci.yaml@main
   cd:
     name: CD
     needs:
       - ci
-    uses: Lucky3028/shared-workflows/.github/workflows/kotlin-ci.yaml@main
+    uses: GiganticMinecraft/shared-workflows/.github/workflows/kotlin-ci.yaml@main
     if: github.ref == 'refs/heads/main'
