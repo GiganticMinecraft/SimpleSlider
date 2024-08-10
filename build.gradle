@@ -3,7 +3,7 @@ buildscript {
         kotlin_version = "2.0.0"
         spigot_version = "1.16.5-R0.1-SNAPSHOT"
         worldguard_version = "7.1.0-SNAPSHOT"
-        item_nbt_api_version = "2.12.0"
+        item_nbt_api_version = "2.13.2"
         bstats_version = "1.8"
     }
     repositories {
