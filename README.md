@@ -23,9 +23,9 @@ Inspired by [SimpleElevators](https://www.spigotmc.org/resources/simple-elevator
 
 ## Requirement
 * Spigot
-    * Developed and debugged in 1.16.5
+    * Developed and debugged in 1.18.2
 * item-nbt-api-plugin-2.11.2
-* worldguard-bukkit-7.1.0-SNAPSHOT
+* worldguard-bukkit-7.0.7
 
 ## License
 [GNU General Public License v3.0](./LICENSE)
